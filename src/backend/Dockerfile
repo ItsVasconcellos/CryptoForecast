@@ -4,13 +4,9 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN python -m venv venv
+RUN pip install -r requirements.txt
 
-RUN ./venv/bin/pip install --no-cache-dir --upgrade pip
-
-RUN ./venv/bin/pip install --no-cache-dir --upgrade -r requirements.txt
-
-COPY ./app /backend/app
+COPY ./app /app/app
 
 ENV PYTHONPATH=/app
 
