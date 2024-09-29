@@ -43,6 +43,9 @@ class GridServiceSingleton:
     def __init__(self, *args, **kwargs):
         raise RuntimeError("Call get_instance() instead")
 
+    def __new__(cls, *args, **kwargs):
+        raise RuntimeError("Call get_instance() instead")
+
     @staticmethod
     def initialize(gridfs_repo: GridFSRepository):
         GridServiceSingleton.__instance = GridService(gridfs_repo)
