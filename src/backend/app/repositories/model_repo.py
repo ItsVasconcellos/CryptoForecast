@@ -8,7 +8,7 @@ from app.models.model import Model, ModelUpdate
 class ModelRepository:
     def __init__(self, db: MongoDB):
         self.db = db
-        self.collection_model = db.get_collection("model")
+        self.collection = db.get_collection("model")
 
     def get_all_models(self) -> list[Model]:
         documents = self.collection.find()

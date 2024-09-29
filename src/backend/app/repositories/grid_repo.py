@@ -5,7 +5,7 @@ from bson.objectid import ObjectId
 
 class GridFSRepository:
     def __init__(self, db: MongoDB):
-        self.fs = gridfs.GridFS(db)
+        self.fs = gridfs.GridFS(db.get_database())
 
     def save_model(self, filename: str, model_data: bytes) -> str:
         file_id = self.fs.put(model_data, filename=filename)
