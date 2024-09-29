@@ -5,9 +5,16 @@ from contextlib import asynccontextmanager
 from app.db.mongodb import MongoDB
 
 
-from app.routers import log_router
 from app.repositories.log_repo import LogRepository
 from app.services.log_service import LogServiceSingleton, setup_logging
+from app.routers import log_router
+
+from app.repositories.grid_repo import GridFSRepository
+from app.services.grid_service import GridServiceSingleton
+
+from app.repositories.model_repo import ModelRepository
+from app.services.model_service import ModelServiceSingleton
+from app.routers import model_router
 
 from dotenv import dotenv_values
 
@@ -24,6 +31,8 @@ async def app_lifespan(app: FastAPI):
 
     log_repo = LogRepository(app.state.db)
     LogServiceSingleton.initialize(log_repo)
+    ModelServiceSingleton.initialize(ModelRepository(app.state.db))
+    GridServiceSingleton.initialize(GridFSRepository(app.state.db))
     logger = setup_logging(LogServiceSingleton.get_instance())
 
     print("Connected to the MongoDB database!")
@@ -49,6 +58,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(log_router.router)
+app.include_router(model_router.router)
 
 
 @app.get("/")
