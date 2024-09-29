@@ -8,8 +8,6 @@ class Model(BaseModel):
     gridfs_path: str = Field(
         ..., description="Path in GridFS where the model is stored"
     )
-
-    type_model: str = Field(..., description="Name of the trained model")
     accuracy: float = Field(..., description="Accuracy of the model")
     precision: float = Field(..., description="Precision of the model")
     recall: float = Field(..., description="Recall of the model")
@@ -22,8 +20,7 @@ class Model(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "model_name": "RandomForestModel_v1",
-                "type_model": "Bitcoin",
+                "model_name": "BitcoinPriceModel_v1",
                 "gridfs_path": "/path/to/model/in/gridfs",
                 "accuracy": 0.10,
                 "precision": 0.20,
@@ -39,7 +36,6 @@ class ModelUpdate(BaseModel):
     gridfs_path: Optional[str] = Field(
         None, description="Path in GridFS where the model is stored"
     )
-    type_model: Optional[str] = Field(..., description="Name of the trained model")
 
     accuracy: Optional[float] = Field(None, description="Accuracy of the model")
     precision: Optional[float] = Field(None, description="Precision of the model")
@@ -53,8 +49,7 @@ class ModelUpdate(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
-                "model_name": "RandomForestModel_v1",
-                "type_model": "Bitcoin",
+                "model_name": "BitcoinPriceModel_v1",
                 "gridfs_path": "/path/to/model/in/gridfs",
                 "accuracy": 0.10,
                 "precision": 0.20,
