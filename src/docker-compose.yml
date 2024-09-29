@@ -1,0 +1,24 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URI=mongodb://db:27017
+      - DATABASE_NAME=cryptoForecast
+    depends_on:
+      - db
+
+  db:
+    image: "mongo:latest"
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
