@@ -12,6 +12,18 @@ services:
     depends_on:
       - db
 
+  frontend: 
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - network
+      
   db:
     image: "mongo:latest"
     container_name: mongodb
@@ -22,3 +34,6 @@ services:
 
 volumes:
   mongo_data:
+
+networks:
+  network:
