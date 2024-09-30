@@ -14,8 +14,8 @@ def train_models(crypto: str, timesteps=30):
     df_rounded = round_up(df)
     close_prices_scaled = separate_data(df_rounded)
     x, y = create_lstm_data(close_prices_scaled)
-    model = train_model(x, y, timesteps)
-    return save_model(model)
+    model = train_model(x, y, crypto, timesteps)
+    return f"../modelos/{crypto}.h5"
 
 
 def get_data(crypto: str):
@@ -43,7 +43,7 @@ def create_lstm_data(data, time_steps=1):
     return np.array(x), np.array(y)
 
 
-def train_model(X, y, timesteps=30):
+def train_model(X, y, crypto, timesteps=30):
     x, y = create_lstm_data(X, timesteps)
     x = np.reshape(x, (x.shape[0], x.shape[1], 1))
 
@@ -52,20 +52,12 @@ def train_model(X, y, timesteps=30):
     model.add(LSTM(units=50))
     model.add(Dense(units=1))
     model.compile(optimizer="adam", loss="mean_squared_error")
-    model.fit(x, y, epochs=10, batch_size=32)
-    return model
-
-
-def save_model(model):
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    model_dir = os.path.join(current_dir, "../models")
-
+    model.fit(x, y, epochs=2, batch_size=32)
+    model_dir = "/app/models"
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
+    name = crypto + ".h5"
+    model.save(os.path.join(model_dir, name))
+    print(f"Model saved at: {model_dir}/model.h5")
 
-    filename = "model.h5"
-    file_path = os.path.join(model_dir, filename)
-
-    model.save(file_path)
-
-    return file_path
+    return model
