@@ -26,14 +26,14 @@ class GridService:
 
     def train_models(self):
         for crypto in Crypto:
-            model_data = train_models(crypto)
+            train_models(crypto)
 
     def load_model_from_local(self, model_name: str):
         try:
-            # Construct the path to the model file
-            model_path = os.path.join(
-                os.path.dirname(__file__), "../modelos", model_name
-            )
+            # Construct the path to the model folder
+            model_folder = os.path.join(os.path.dirname(__file__), "../modelos")
+            # Construct the full path to the model file
+            model_path = os.path.join(model_folder, model_name)
 
             # Load the model from the specified path
             model = load_model(model_path)
@@ -46,11 +46,12 @@ class GridService:
     def delete_model(self, file_id: str):
         self.gridfs_repo.delete_model(file_id)
 
-    def predict(self, crypto: str, datetime: datetime, time_steps=30) -> list[dict]:
-        future_dates = pd.date_range(start=datetime, periods=30)
+    def predict(self, crypto: str, dt: datetime, time_steps=30) -> list[dict]:
+        future_dates = pd.date_range(start=datetime.now(), periods=30)
         data = get_data(crypto)
         close_prices = data["Close"].values
 
+        time_steps = 10  # Define time_steps, you might need to adjust this
         last_prices = close_prices[-time_steps:]
 
         scaler = MinMaxScaler(feature_range=(0, 1))
@@ -70,7 +71,7 @@ class GridService:
             next_input_scaled[0] = predicted_price_scaled[0]
             last_prices_scaled = np.vstack([last_prices_scaled, next_input_scaled])
         future_data = [
-            {"Date": date, "Predicted Price": price}
+            {"date": date, "price": price}
             for date, price in zip(future_dates, predicted_prices)
         ]
         return future_data

@@ -7,6 +7,7 @@ from app.services.grid_service import GridServiceSingleton
 from app.services.model_service import ModelServiceSingleton
 from app.utils.crypto import Crypto, Models_Crypto
 import logging
+import datetime as dt
 
 router = APIRouter(prefix="/api/model", tags=["Model"])
 
@@ -29,17 +30,15 @@ async def train_models():
     response_model=list[Result],
     response_description="Make predictions",
 )
-async def make_prediction(
-    crypto: str, prediction_request: datetime, timesteps: int = 30
-):
+async def make_prediction(crypto: str, days: int, timesteps: int = 30):
     try:
-
+        date = dt.datetime.today() - dt.timedelta(days=days)
         predictions = GridServiceSingleton.get_instance().predict(
-            crypto, prediction_request, time_steps=timesteps
+            crypto, date, time_steps=timesteps
         )
         results = []
-        for i, prediction in enumerate(predictions):
-            result = Result(prediction=prediction, timestamp=prediction_request[i])
+        for prediction in predictions:
+            result = Result(date=prediction["date"], value=prediction["price"])
             results.append(result)
         return results
 
