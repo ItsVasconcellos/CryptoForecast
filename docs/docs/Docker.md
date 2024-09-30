@@ -1,6 +1,6 @@
 ---
 title: "Docker"
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 Esse arquivo `docker-compose.yml` é utilizado para orquestrar múltiplos serviços de um aplicativo. Há três containers: um para o **backend** (FastAPI), um para o **frontend** (Next.js + TailwindCSS), e outro para o banco de dados **MongoDB**.
