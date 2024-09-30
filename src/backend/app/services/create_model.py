@@ -52,7 +52,7 @@ def train_model(X, y, crypto, timesteps=30):
     model.add(LSTM(units=50))
     model.add(Dense(units=1))
     model.compile(optimizer="adam", loss="mean_squared_error")
-    model.fit(x, y, epochs=2, batch_size=32)
+    model.fit(x, y, epochs=10, batch_size=32)
     model_dir = "/app/models"
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
