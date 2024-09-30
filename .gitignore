@@ -1,3 +1,6 @@
+# Ignore model generated
+*.h5
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
