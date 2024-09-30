@@ -3,8 +3,7 @@ from typing import List
 from app.utils.PredictionRequest import PredictionRequest
 from app.models.result import Result
 from app.services.grid_service import GridServiceSingleton
-from app.services.model_service import ModelServiceSingleton
-from app.utils.crypto import Crypto, Models_Crypto
+from app.services.log_service import LogServiceSingleton
 import logging
 import datetime as dt
 
@@ -20,8 +19,33 @@ logger = logging.getLogger("fastapi")
     response_description="Train all models",
 )
 async def train_models():
-    GridServiceSingleton.get_instance().train_models()
-    return "All models trained successfully"
+    try:
+        GridServiceSingleton.get_instance().train_models()
+        LogServiceSingleton.get_instance().emit(
+            logging.LogRecord(
+                "fastapi",
+                logging.INFO,
+                dt.datetime.now(),
+                msg="/api/models/train was executed with  success",
+                lineno=None,
+                exc_info=None,
+                args=None,
+            )
+        )
+        return "All models trained successfully"
+    except Exception as e:
+        LogServiceSingleton.get_instance().emit(
+            logging.LogRecord(
+                "fastapi",
+                logging.ERROR,
+                dt.datetime.now(),
+                msg="An error occurred while executing /api/models/train",
+                lineno=None,
+                exc_info=None,
+                args=None,
+            )
+        )
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post(
@@ -31,7 +55,7 @@ async def train_models():
 )
 async def make_prediction(request: PredictionRequest):
     try:
-
+        if GridServiceSingleton.get_instance().get()
         predictions = GridServiceSingleton.get_instance().predict(
             request.crypto, request.days, time_steps=request.timesteps
         )
@@ -39,8 +63,30 @@ async def make_prediction(request: PredictionRequest):
         for prediction in predictions:
             result = Result(date=prediction["date"], value=prediction["price"])
             results.append(result)
+        LogServiceSingleton.get_instance().emit(
+            logging.LogRecord(
+                "fastapi",
+                logging.INFO,
+                dt.datetime.now(),
+                msg="/api/models/predictions executed with sucecess",
+                lineno=None,
+                exc_info=None,
+                args=None,
+            )
+        )
         return results
 
     except Exception as e:
         print(e)
+        LogServiceSingleton.get_instance().emit(
+            logging.LogRecord(
+                "fastapi",
+                logging.ERROR,
+                dt.datetime.now(),
+                msg="An error occurred while exectuing /api/models/predictions",
+                lineno=None,
+                exc_info=None,
+                args=None,
+            )
+        )
         raise HTTPException(status_code=500, detail=str(e))
