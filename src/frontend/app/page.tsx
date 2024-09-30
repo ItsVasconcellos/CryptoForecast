@@ -1,23 +1,24 @@
 "use client";
-"use client";
 
 import { useState } from "react";
-import { Chart as ChartJS } from "chart.js";
-import { Chart, Line } from "react-chartjs-2";
 import {
-  CategoryScale,
-  LinearScale,
-  PointElement,
+  Chart as ChartJS,
+  LineController,
   LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
+import { Line } from "react-chartjs-2";
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
+  LineController,
   LineElement,
+  PointElement,
+  LinearScale,
+  CategoryScale,
   Title,
   Tooltip,
   Legend
@@ -32,6 +33,7 @@ import TrainButton from "@/components/train_buttton";
 import Image from "next/image";
 export default function Home() {
   const [predictionData, setPredictionData] = useState<PredictionData[]>([]);
+  const [loading, setLoading] = useState(false);
 
   console.log(predictionData);
   const handlePredictClick = () => {
@@ -50,6 +52,8 @@ export default function Home() {
       return;
     }
 
+    setLoading(true);
+
     fetch("http://localhost:8000/api/model/predict", {
       method: "POST",
       headers: {
@@ -64,9 +68,11 @@ export default function Home() {
       .then((data) => {
         console.log("Success:", data);
         setPredictionData(data);
+        setLoading(false);
       })
       .catch((error) => {
         console.error("Error:", error);
+        setLoading(false);
       });
   };
 
@@ -108,45 +114,54 @@ export default function Home() {
             </select>
           </div>
         </div>
-        {predictionData.length > 0 && (
-          <div className="w-full mt-8">
-            <h2 className="text-xl font-bold mb-4">Prediction Result</h2>
-            <Chart
-              type="line"
-              data={{
-                labels: Array.isArray(predictionData)
-                  ? predictionData.map((data) => {
-                      const date = new Date(data.date);
-                      return `${
-                        date.getMonth() + 1
-                      }/${date.getDate()}/${date.getFullYear()}`;
-                    })
-                  : [],
-                datasets: [
-                  {
-                    label: "Price",
-                    data: Array.isArray(predictionData)
-                      ? predictionData.map((data) => data.value)
-                      : [],
-                    borderColor: "rgba(75, 192, 192, 1)",
-                    backgroundColor: "rgba(75, 192, 192, 0.2)",
-                  },
-                ],
-              }}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: {
-                    position: "top",
-                  },
-                  title: {
-                    display: true,
-                    text: "Cryptocurrency Price Prediction",
-                  },
-                },
-              }}
-            />
+        {loading ? (
+          <div className="flex justify-center items-center w-full mt-8">
+            <span className="visually-hidden">Loading...</span>
+            <div
+              className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
+              role="status"
+            ></div>
           </div>
+        ) : (
+          predictionData.length > 0 && (
+            <div className="w-full mt-8">
+              <h2 className="text-xl font-bold mb-4">Prediction Result</h2>
+              <Line
+                data={{
+                  labels: Array.isArray(predictionData)
+                    ? predictionData.map((data) => {
+                        const date = new Date(data.date);
+                        return `${
+                          date.getMonth() + 1
+                        }/${date.getDate()}/${date.getFullYear()}`;
+                      })
+                    : [],
+                  datasets: [
+                    {
+                      label: "Price",
+                      data: Array.isArray(predictionData)
+                        ? predictionData.map((data) => data.value)
+                        : [],
+                      borderColor: "rgba(75, 192, 192, 1)",
+                      backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    },
+                  ],
+                }}
+                options={{
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      position: "top",
+                    },
+                    title: {
+                      display: true,
+                      text: "Cryptocurrency Price Prediction",
+                    },
+                  },
+                }}
+              />
+            </div>
+          )
         )}
         <div className="flex flex-row align-middle w-full justify-center gap-5">
           <button
