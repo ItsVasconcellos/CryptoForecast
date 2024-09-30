@@ -22,11 +22,18 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+interface PredictionData {
+  value: number;
+  date: string;
+}
+
 import TrainButton from "@/components/train_buttton";
 import Image from "next/image";
 export default function Home() {
-  const [predictionData, setPredictionData] = useState(null);
+  const [predictionData, setPredictionData] = useState<PredictionData[]>([]);
 
+  console.log(predictionData);
   const handlePredictClick = () => {
     const cryptoSelect = document.getElementById(
       "crypto-select"
@@ -36,7 +43,7 @@ export default function Home() {
     ) as HTMLSelectElement;
 
     const selectedCrypto = cryptoSelect.value;
-    const selectedPeriod = periodSelect.value;
+    const selectedPeriod = parseInt(periodSelect.value);
 
     if (!selectedCrypto || !selectedPeriod) {
       alert("Please select both a cryptocurrency and a prediction period.");
@@ -49,13 +56,13 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        cryptocurrency: selectedCrypto,
-        period: selectedPeriod,
+        crypto: selectedCrypto,
+        days: selectedPeriod,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Prediction result:", data);
+        console.log("Success:", data);
         setPredictionData(data);
       })
       .catch((error) => {
@@ -76,10 +83,13 @@ export default function Home() {
               id="crypto-select"
               className="p-2 border rounded text-black"
             >
-              <option value="bitcoin">Bitcoin</option>
-              <option value="ethereum">Ethereum</option>
-              <option value="litecoin">Litecoin</option>
-              {/* Add more options as needed */}
+              <option value="SOL-USD">Solana (SOL-USD)</option>
+              <option value="BTC-USD">Bitcoin (BTC-USD)</option>
+              <option value="ETH-USD">Ethereum (ETH-USD)</option>
+              <option value="LTC-USD">Litecoin (LTC-USD)</option>
+              <option value="XRP-USD">Ripple (XRP-USD)</option>
+              <option value="ADA-USD">Cardano (ADA-USD)</option>
+              <option value="DOT-USD">Polkadot (DOT-USD)</option>
             </select>
           </div>
           <div className="flex flex-col gap-4">
@@ -90,24 +100,34 @@ export default function Home() {
               id="period-select"
               className="p-2 border rounded text-black"
             >
-              <option value="1d">1 Day</option>
-              <option value="1w">1 Week</option>
-              <option value="1m">1 Month</option>
+              <option value="1">1 Day</option>
+              <option value="7">1 Week</option>
+              <option value="14">2 Weeks</option>
+              <option value="30">1 Month</option>
               {/* Add more options as needed */}
             </select>
           </div>
         </div>
-        {predictionData && (
+        {predictionData.length > 0 && (
           <div className="w-full mt-8">
             <h2 className="text-xl font-bold mb-4">Prediction Result</h2>
             <Chart
               type="line"
               data={{
-                labels: ["teste", "teste2", "teste3"],
+                labels: Array.isArray(predictionData)
+                  ? predictionData.map((data) => {
+                      const date = new Date(data.date);
+                      return `${
+                        date.getMonth() + 1
+                      }/${date.getDate()}/${date.getFullYear()}`;
+                    })
+                  : [],
                 datasets: [
                   {
                     label: "Price",
-                    data: ["teste", "teste2", "teste3"],
+                    data: Array.isArray(predictionData)
+                      ? predictionData.map((data) => data.value)
+                      : [],
                     borderColor: "rgba(75, 192, 192, 1)",
                     backgroundColor: "rgba(75, 192, 192, 0.2)",
                   },
