@@ -55,7 +55,6 @@ async def train_models():
 )
 async def make_prediction(request: PredictionRequest):
     try:
-        if GridServiceSingleton.get_instance().get()
         predictions = GridServiceSingleton.get_instance().predict(
             request.crypto, request.days, time_steps=request.timesteps
         )
