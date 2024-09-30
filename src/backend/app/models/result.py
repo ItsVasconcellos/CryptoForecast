@@ -7,6 +7,4 @@ class Result(BaseModel):
     value: float = Field(..., description="Predicted value")
 
     class Config:
-        json_schema_extra = {
-            "example": {"VALUE": "200", "DATA": "2023-10-01T12:00:00Z"}
-        }
+        json_schema_extra = {"example": {"VALUE": 200, "DATA": "2023-10-01T12:00:00Z"}}
