@@ -46,8 +46,8 @@ class GridService:
     def delete_model(self, file_id: str):
         self.gridfs_repo.delete_model(file_id)
 
-    def predict(self, crypto: str, dt: datetime, time_steps=30) -> list[dict]:
-        future_dates = pd.date_range(start=datetime.now(), periods=30)
+    def predict(self, crypto: str, days: int, time_steps=30) -> list[dict]:
+        future_dates = pd.date_range(start=datetime.now(), periods=days)
         data = get_data(crypto)
         close_prices = data["Close"].values
 

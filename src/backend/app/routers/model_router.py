@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
-from datetime import datetime
-from app.models.model import ModelUpdate
+from app.utils.PredictionRequest import PredictionRequest
 from app.models.result import Result
 from app.services.grid_service import GridServiceSingleton
 from app.services.model_service import ModelServiceSingleton
@@ -26,15 +25,15 @@ async def train_models():
 
 
 @router.post(
-    "/predict/{crypto}",
+    "/predict",
     response_model=list[Result],
     response_description="Make predictions",
 )
-async def make_prediction(crypto: str, days: int, timesteps: int = 30):
+async def make_prediction(request: PredictionRequest):
     try:
-        date = dt.datetime.today() - dt.timedelta(days=days)
+
         predictions = GridServiceSingleton.get_instance().predict(
-            crypto, date, time_steps=timesteps
+            request.crypto, request.days, time_steps=request.timesteps
         )
         results = []
         for prediction in predictions:
