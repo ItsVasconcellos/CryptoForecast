@@ -11,7 +11,9 @@ services:
       - DATABASE_NAME=cryptoForecast
     depends_on:
       - db
-
+    volumes:
+     - ./backend/app/modelos:/app/models
+      
   frontend: 
     build:
       context: ./frontend
@@ -23,7 +25,7 @@ services:
       - backend
     networks:
       - network
-      
+
   db:
     image: "mongo:latest"
     container_name: mongodb
@@ -34,6 +36,7 @@ services:
 
 volumes:
   mongo_data:
+  model_storage:
 
 networks:
   network:
