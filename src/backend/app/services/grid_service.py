@@ -25,19 +25,15 @@ class GridService:
         return self.gridfs_repo.get_model(file_id)
 
     def train_models(self):
-        file_ids = []
         for crypto in Crypto:
             model_data = train_models(crypto)
-            with open(model_data, "rb") as model_file:
-                model_bytes = model_file.read()
-            file_id = self.gridfs_repo.save_model(f"{crypto}.h5", model_bytes)
-            file_ids.append(file_id)
-        return file_ids
 
     def load_model_from_local(self, model_name: str):
         try:
             # Construct the path to the model file
-            model_path = os.path.join(os.path.dirname(__file__), "../modelos", model_name)
+            model_path = os.path.join(
+                os.path.dirname(__file__), "../modelos", model_name
+            )
 
             # Load the model from the specified path
             model = load_model(model_path)
@@ -50,9 +46,7 @@ class GridService:
     def delete_model(self, file_id: str):
         self.gridfs_repo.delete_model(file_id)
 
-    def predict(
-        self,  crypto: str, datetime: datetime, time_steps=30
-    ) -> list[dict]:
+    def predict(self, crypto: str, datetime: datetime, time_steps=30) -> list[dict]:
         future_dates = pd.date_range(start=datetime, periods=30)
         data = get_data(crypto)
         close_prices = data["Close"].values

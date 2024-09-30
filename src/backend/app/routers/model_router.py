@@ -20,16 +20,7 @@ logger = logging.getLogger("fastapi")
     response_description="Train all models",
 )
 async def train_models():
-    models_exists = ModelServiceSingleton.get_instance().get_all_models()
-    if len(models_exists) != len(Crypto):
-        for model in Models_Crypto:
-            ModelServiceSingleton.get_instance().create_model(model)
-    files_ids = GridServiceSingleton.get_instance().train_models()
-    print(files_ids)
-    for i, file_id in enumerate(files_ids):
-        ModelServiceSingleton.get_instance().update_model(
-            Crypto[i], ModelUpdate(gridfs_path=file_id)
-        )
+    GridServiceSingleton.get_instance().train_models()
     return "All models trained successfully"
 
 
@@ -42,10 +33,9 @@ async def make_prediction(
     crypto: str, prediction_request: datetime, timesteps: int = 30
 ):
     try:
-        
 
         predictions = GridServiceSingleton.get_instance().predict(
-             crypto, prediction_request, time_steps=timesteps
+            crypto, prediction_request, time_steps=timesteps
         )
         results = []
         for i, prediction in enumerate(predictions):
