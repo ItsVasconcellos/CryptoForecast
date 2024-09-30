@@ -8,11 +8,6 @@ class Model(BaseModel):
     gridfs_path: str = Field(
         ..., description="Path in GridFS where the model is stored"
     )
-    accuracy: float = Field(..., description="Accuracy of the model")
-    precision: float = Field(..., description="Precision of the model")
-    recall: float = Field(..., description="Recall of the model")
-    f1_score: float = Field(..., description="F1 score of the model")
-
     last_trained: Optional[datetime] = Field(
         None, description="Date when the model was last trained"
     )
@@ -22,10 +17,6 @@ class Model(BaseModel):
             "example": {
                 "model_name": "BitcoinPriceModel_v1",
                 "gridfs_path": "/path/to/model/in/gridfs",
-                "accuracy": 0.10,
-                "precision": 0.20,
-                "recall": 0.30,
-                "f1_score": 0.40,
                 "last_trained": "2024-09-10T12:00:00",
             }
         }
@@ -37,11 +28,6 @@ class ModelUpdate(BaseModel):
         None, description="Path in GridFS where the model is stored"
     )
 
-    accuracy: Optional[float] = Field(None, description="Accuracy of the model")
-    precision: Optional[float] = Field(None, description="Precision of the model")
-    recall: Optional[float] = Field(None, description="Recall of the model")
-    f1_score: Optional[float] = Field(None, description="F1 score of the model")
-
     last_trained: Optional[datetime] = Field(
         None, description="Date when the model was last trained"
     )
@@ -51,10 +37,6 @@ class ModelUpdate(BaseModel):
             "example": {
                 "model_name": "BitcoinPriceModel_v1",
                 "gridfs_path": "/path/to/model/in/gridfs",
-                "accuracy": 0.10,
-                "precision": 0.20,
-                "recall": 0.30,
-                "f1_score": 0.40,
                 "last_trained": "2024-09-10T12:00:00",
             }
         }

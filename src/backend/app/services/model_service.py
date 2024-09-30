@@ -14,7 +14,7 @@ class ModelService:
         return self.model_repo.get_model(model_name)
 
     def create_model(self, model: Model) -> str:
-        return self.model_repo.create_model(model)
+        return self.model_repo.save_model(model)
 
     def update_model(self, model_name: str, model: ModelUpdate) -> bool:
         return self.model_repo.update_model(model_name, model)

@@ -17,6 +17,7 @@ class ModelRepository:
     def get_model(self, model_name: str) -> Optional[Model]:
         document = self.collection.find_one({"model_name": model_name})
         return Model(**document) if document else None
+    
 
     def save_model(self, model: Model):
         self.collection.insert_one(model.model_dump(by_alias=True))
