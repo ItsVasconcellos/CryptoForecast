@@ -61,6 +61,9 @@ class GridService:
 
         model = self.load_model_from_local(f"{crypto}.h5")
 
+        if model is None:
+            self.train_models()
+
         for i in range(len(future_dates)):
             x_pred = np.array([last_prices_scaled[-time_steps:, 0]])
             x_pred = np.reshape(x_pred, (x_pred.shape[0], x_pred.shape[1], 1))
