@@ -1,4 +1,7 @@
-# Rotas da API
+---
+title: "Rotas"
+sidebar_position: 3
+---
 
 ## Model Router
 
@@ -8,11 +11,11 @@
 - **Método:** `GET`
 - **Resposta:**
   - **200 OK:** `"Todos os modelos treinados com sucesso"`
-  - **500 Internal Server Error:** Mensagem de erro detalhando o problema
+  - **500 Internal Server Error:** Mensagem de erro detalhando o problema.
 - **Descrição:** Treina todos os modelos e registra a operação.
 
 :::tip Dica
-Essa rota permite o treino de todos os modelos de uma vez só, retirando a necessidade de enviar diversas requisições para treinar os diferentes modelos
+Essa rota permite o treino de todos os modelos de uma vez só, retirando a necessidade de enviar diversas requisições para treinar os diferentes modelos.
 :::
 
 ### Fazer Previsões
@@ -21,12 +24,12 @@ Essa rota permite o treino de todos os modelos de uma vez só, retirando a neces
 - **Método:** `POST`
 - **Corpo da Requisição:**
   - Objeto `PredictionRequest` contendo:
-    - `crypto`: A criptomoeda para prever
-    - `days`: Número de dias para prever
-    - `timesteps`: Passos de tempo para a previsão
+    - `crypto`: A criptomoeda para prever.
+    - `days`: Número de dias para prever.
+    - `timesteps`: Passos de tempo para a previsão.
 - **Resposta:**
-  - **200 OK:** Lista de objetos `Result` contendo datas e valores de previsão
-  - **500 Internal Server Error:** Mensagem de erro detalhando o problema
+  - **200 OK:** Lista de objetos `Result` contendo datas e valores de previsão.
+  - **500 Internal Server Error:** Mensagem de erro detalhando o problema.
 - **Descrição:** Faz previsões com base na requisição fornecida e registra a operação.
 
 ## Log Router
@@ -36,7 +39,7 @@ Essa rota permite o treino de todos os modelos de uma vez só, retirando a neces
 - **Endpoint:** `/api/logs/`
 - **Método:** `GET`
 - **Parâmetros de Consulta:**
-  - `limit`: O número máximo de logs a serem recuperados (o padrão é 100)
+  - `limit`: O número máximo de logs a serem recuperados (o padrão é 100).
 - **Resposta:**
   - **200 OK:** Lista de objetos `LogModel`
 - **Descrição:** Recupera uma lista de logs até o limite especificado.
@@ -49,3 +52,4 @@ Essa rota permite o treino de todos os modelos de uma vez só, retirando a neces
 "timestamp": self.timestamp.isoformat(),
 }```
 :::
+````
