@@ -5,15 +5,15 @@ sidebar_position: 2
 
 ## Opção do MongoDB
 
-A escolha do MongoDB para o projeto CryptoForecast se justifica por sua flexibilidade no armazenamento de dados não estruturados, como os logs de previsões e os modelos de machine learning. O MongoDB, sendo um banco de dados NoSQL, é ideal para armazenar documentos com diferentes formatos e estruturas, o que facilita a criação de coleções adaptáveis ao crescimento e à evolução dos dados ao longo do tempo, sem a rigidez de esquemas fixos.
+A escolha do MongoDB para o projeto CryptoForecast se justifica por sua flexibilidade no armazenamento de dados não estruturados, como os logs de previsões e os modelos de Machine Learning. O MongoDB, sendo um banco de dados NoSQL, é ideal para armazenar documentos com diferentes formatos e estruturas, o que facilita a criação de coleções adaptáveis ao crescimento e à evolução dos dados ao longo do tempo, sem a rigidez de esquemas fixos.
 
-Além disso, o MongoDB oferece suporte ao GridFS, uma funcionalidade que permite armazenar grandes arquivos, como modelos treinados de machine learning, que podem ultrapassar o limite de tamanho de documentos tradicionais do MongoDB. Apesar de a tentativa inicial de usar o GridFS para o salvamento de modelos ter gerado dificuldades na serialização e recuperação dos arquivos, o MongoDB ainda foi mantido como banco de dados e permite a futura implementação do processo de salvamentos de modelos.
+Além disso, o MongoDB oferece suporte ao GridFS, uma funcionalidade que permite armazenar grandes arquivos, como modelos treinados de Machine Learning, que podem ultrapassar o limite de tamanho de documentos tradicionais do MongoDB. Apesar de a tentativa inicial de usar o GridFS para o salvamento de modelos ter gerado dificuldades na serialização e recuperação dos arquivos, o MongoDB ainda foi mantido como banco de dados e permite a futura implementação do processo de salvamentos de modelos.
 
 ## Coleções
 
 ### Models
 
-Essa coleção inicialmente foi projetada para armazenar informações sobre os modelos de machine learning, como o nome do modelo e o caminho de onde ele seria salvo no GridFS. No entanto, o salvamento dos modelos foi reestruturado para o volume do Docker, mantendo a simplicidade e evitando as complexidades encontradas com o GridFS. Além disso, a coleção models permite adicionar os campos de métrica, garantindo a implementação de uma feature de escolha de modelos baseada em uma determinada pipeline.
+Essa coleção foi inicialmente projetada para armazenar informações sobre os modelos de Machine Learning, como o nome do modelo e o caminho por onde ele seria salvo no GridFS. No entanto, o salvamento dos modelos foi reestruturado para o volume do Docker, mantendo a simplicidade e evitando as complexidades encontradas com o GridFS. Além disso, a coleção models permite adicionar os campos de métrica, garantindo a implementação de uma feature de escolha de modelos baseada em uma determinada pipeline.
 
 ```py
 {
