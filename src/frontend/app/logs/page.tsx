@@ -19,15 +19,13 @@ export default function logs() {
   const [loading, setLoading] = useState(false);
   // Example logs data
   const [logs, setLogs] = useState<Log[]>([]);
+
+  React.useEffect(() => {
+    getLog();
+  }, []);
   const getLog = async () => {
     setLoading(true);
     try {
-      const crypto = (
-        document.getElementById("crypto-select") as HTMLSelectElement
-      ).value;
-      const period = (
-        document.getElementById("period-select") as HTMLSelectElement
-      ).value;
       const response = await fetch("http://localhost:8000/api/logs", {
         method: "GET",
         headers: {
@@ -60,35 +58,44 @@ export default function logs() {
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <h1 className="text-4xl font-bold">Crypto Previewer</h1>
-      <div className="w-2/4">
-        <h1>Logs</h1>
+      <div className="flex-col items-center justify-center align-middle w-3/4">
+        <h1 className="text-center text-2xl">Logs</h1>
         {loading && <p>Loading...</p>}
-        <Table celled>
+        <Table celled className="w-full">
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>Log_Level</Table.HeaderCell>
-              <Table.HeaderCell>Message</Table.HeaderCell>
-              <Table.HeaderCell>Timestamp</Table.HeaderCell>
+              <Table.HeaderCell className="w-1/4">Log_Level</Table.HeaderCell>
+              <Table.HeaderCell className="w-2/4">Message</Table.HeaderCell>
+              <Table.HeaderCell className="w-1/4">Timestamp</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
-          <Table.Body>
+          <Table.Body className="text-center">
             {displayedLogs.map((log, index) => (
               <Table.Row key={index}>
-                <Table.Cell>{log.log_level}</Table.Cell>
-                <Table.Cell>{log.message}</Table.Cell>
-                <Table.Cell>{log.timestamp}</Table.Cell>
+                <Table.Cell className="w-1/4">{log.log_level}</Table.Cell>
+                <Table.Cell className="w-2/4 break-normal">
+                  {log.message}
+                </Table.Cell>
+                <Table.Cell className="w-1/4">
+                  {(() => {
+                    const date = new Date(log.timestamp);
+                    return `${
+                      date.getMonth() + 1
+                    }/${date.getDate()}/${date.getFullYear()}`;
+                  })()}
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
         </Table>
-        <Pagination
-          activePage={activePage}
-          totalPages={totalPages}
-          onPageChange={(e, { activePage = 1 }) =>
-            handlePageChange(e, { activePage })
-          }
-        />
       </div>
+      <Pagination
+        activePage={activePage}
+        totalPages={totalPages}
+        onPageChange={(e, { activePage = 1 }) =>
+          handlePageChange(e, { activePage })
+        }
+      />
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
